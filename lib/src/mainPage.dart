@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:diagnosa_apps/model/result_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:diagnosa_apps/model/question_model.dart';
@@ -9,6 +12,8 @@ import 'package:diagnosa_apps/src/submitPage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/radio_model.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -27,7 +32,6 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     checkLoginStatus();
     checkQuestion();
-
   }
 
   // widget radio
@@ -42,19 +46,18 @@ class _MainPageState extends State<MainPage> {
                 controlAffinity: ListTileControlAffinity.trailing,
                 dense: true,
                 onChanged: (value) {
-            setState(() {
-              _rgProg[index] = value;
-              setState(() {
-                modelData[index].value = value;
-                modelRadio.add(RadioModel(id: 0092,data: modelData));
-                listRadio.id = 0012;
-                listRadio.data = modelData;
-                print(modelRadio.toList());
-              });
-              print(value);
-              print(listRadio.toJson());
-
-            });
+                  setState(() {
+                    _rgProg[index] = value;
+                    setState(() {
+                      modelData[index].value = value;
+                      modelRadio.add(RadioModel(id: 0022, data: modelData));
+                      listRadio.id = 0022;
+                      listRadio.data = modelData;
+                      print(modelRadio.toList());
+                    });
+                    print(value);
+                    print(listRadio.toJson());
+                  });
                 },
               ))
           .toList(),
@@ -85,7 +88,7 @@ class _MainPageState extends State<MainPage> {
         child:
             Text("Submit", style: TextStyle(fontSize: 25, color: Colors.white)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        onPressed: (){
+        onPressed: () {
           print(_rgProg);
         },
       ),
@@ -134,6 +137,61 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  void submitQuestion(BuildContext context) async {
+    Map data = {
+      "id": [0, 0, 1]
+    };
+    print("dibawah data");
+    print(data);
+    print(radioModelToJson(listRadio));
+    var response = await http.post(
+        "http://diagnosa-pms.sudamiskin.com/api/diagnosa",
+        body: radioModelToJson(listRadio));
+    final result = resultModelFromJson(response.body);
+    print(result.status);
+//    print(result.resultModelReturn.length);
+    if (result.status) {
+//      if (result.resultModelReturn.length == null ||
+//          result.resultModelReturn.length == 0) {
+//        showSuccess(context, "Saran", "Tetap Jaga Kesehatan", () {
+//          Navigator.pop(context);
+//        });
+//      } else {
+      final _random = new Random();
+      String data = result.saran;
+      String penyakit = result.penyakit;
+      showSuccess(context, "Penyakit: " + penyakit, data, () {
+        Navigator.pop(context);
+      });
+//      }
+    } else {
+      showSuccess(context, "Keterangan", " anda tidak sakit", () {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  void showSuccess(
+      BuildContext context, String title, String desc, Function onCancel) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => new CupertinoAlertDialog(
+              title: new Text("$title"),
+              content: new Text("$desc"),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text(
+                      "Terima Kasih",
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    onPressed: onCancel),
+              ],
+            ));
+  }
+
   checkQuestion() async {
     {
       SharedPreferences sharedPreferences =
@@ -146,17 +204,19 @@ class _MainPageState extends State<MainPage> {
       setState(() {
         list_question = quesdata.data;
 
-        for(int i= 0 ; quesdata.data.length>i ;i++){
+        for (int i = 0; quesdata.data.length > i; i++) {
           _rgProg.add(0);
           RData valuedata = new RData();
           valuedata.value = 0;
           valuedata.kode = int.parse(quesdata.data[i].idGejala);
-          modelData.add(RData(kode: int.parse(quesdata.data[i].idGejala),value: 0));
+          modelData
+              .add(RData(kode: int.parse(quesdata.data[i].idGejala), value: 0));
           print(valuedata.toString());
         }
-        modelRadio.add(RadioModel(id: 0092,data: modelData));
-          listRadio.id = 0012;
-          listRadio.data = modelData;
+        modelRadio.add(RadioModel(id: 0022, data: modelData));
+        listRadio.id = 0022;
+        listRadio.data = modelData;
+
         print(modelRadio.toList());
       });
       print(listRadio.toJson());
@@ -174,13 +234,14 @@ class _MainPageState extends State<MainPage> {
   checkAnswer() async {
     {
       SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
+          await SharedPreferences.getInstance();
       var jsonResponse = null;
       var response = await http.post(
         "http://diagnosa-pms.sudamiskin.com/api/gejala",
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -196,51 +257,52 @@ class _MainPageState extends State<MainPage> {
               child: Text("Log Out", style: TextStyle(color: Colors.white))),
         ],
       ),
-      body:SafeArea(
-        child:Stack(
-          children: <Widget>[
+      body: SafeArea(
+          child: Stack(
+            children: <Widget>[
             Container(
               padding: EdgeInsets.all(18.0),
               child: new ListView.builder(
                 itemCount: list_question.length,
                 itemBuilder: (context, i) {
-                  return new Card(
-                      child: new Container(
-                        padding: EdgeInsets.all(7.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("${i + 1}. ${list_question[i].nama}"),
-                            _buildRadioButton1(i),
-                          ],
-                        ),
-                      ));
-                },
-              ),
+                return new Card(
+                    child: new Container(
+                      padding: EdgeInsets.all(7.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                        Text("${i + 1}. ${list_question[i].nama}"),
+                        _buildRadioButton1(i),
+                    ],
+                  ),
+                ));
+              },
             ),
-          ],
-        )
-      ),
+          ),
+        ],
+      )),
 
-      floatingActionButton:Align(
+      floatingActionButton: Align(
         alignment: Alignment.bottomCenter,
         child: RaisedButton(
           onPressed: () {
-          // Update the state of the app
-          // ...
-          // Then close the drawer
-            print(listRadio.toJson());
+            // Update the state of the app
+            // ...
+            // Then close the drawer
+            submitQuestion(context);
+            print(radioModelToJson(listRadio));
             print(_rgProg);
 //          Navigator.of(context).push(
 //          MaterialPageRoute(
 //              builder: (BuildContext context) => SubmitPage()
 //          ));
-    },
+          },
           elevation: 0.0,
           color: Colors.orange,
-          child:
-          Text("Submit", style: TextStyle(fontSize: 25, color: Colors.white)),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+          child: Text("Submit",
+              style: TextStyle(fontSize: 25, color: Colors.white)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         ),
       ),
 //      drawer: Drawer(
