@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:diagnosa_apps/main.dart';
+
 import 'package:diagnosa_apps/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:diagnosa_apps/src/mainPage.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'Widget/bezierContainer.dart';
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    fToast = FToast(context);
+    fToast = FToast();
   }
   Widget _backButton() {
     return InkWell(
@@ -192,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
         'password': pass
       };
       var jsonResponse = null;
-      var response = await http.post("http://diagnosa-pms.sudamiskin.com/api/masuk", body: data);
+      var response = await http.post("http://eksatamvan.xyz/api/masuk", body: data);
       jsonResponse = json.decode(response.body);
       print(response.body);
       print(jsonResponse['status']);
@@ -256,24 +256,6 @@ class _LoginPageState extends State<LoginPage> {
           toastDuration: Duration(seconds: 2),
         );
       }
-//    if (jsonResponse['status'] == true) {
-//
-//      String status = jsonResponse['status'];
-//      String data_pasien = jsonResponse['data'];
-//        setState(() {
-//          _isLoading = false;
-//        });
-//        Navigator.of(context).pushAndRemoveUntil(
-//            MaterialPageRoute
-//          (builder: (
-//            BuildContext context) => MainPage()),
-//                (Route<dynamic> route) => false);
-//    }
-//    else {
-//      setState(() {
-//        _isLoading = false;
-//      });
-//    }
     }
     catch(e){
       fToast.showToast(
@@ -325,13 +307,6 @@ class _LoginPageState extends State<LoginPage> {
                         _emailPasswordWidget(),
                         SizedBox(height: 40),
                         _submitButton(),
-//                        Container(
-//                          padding: EdgeInsets.symmetric(vertical: 10),
-//                          alignment: Alignment.centerRight,
-//                          child: Text('Forgot Password ?',
-//                              style: TextStyle(
-//                                  fontSize: 14, fontWeight: FontWeight.w500)),
-//                        ),
                         SizedBox(height: height * .055),
                         _createAccountLabel(),
                       ],

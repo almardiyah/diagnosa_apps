@@ -11,22 +11,22 @@ String resultModelToJson(ResultModel data) => json.encode(data.toJson());
 
 class ResultModel {
   ResultModel({
-    this.idDiagnosa,
-    this.status,
+    // this.idDiagnosa,
+    // this.status,
     this.penyakit,
     this.saran,
 //    this.resultModelReturn,
   });
 
-  int idDiagnosa;
+  // int idDiagnosa;
   String penyakit;
   String saran;
-  bool status;
+  int status;
 //  List<Return> resultModelReturn;
 
   factory ResultModel.fromJson(Map<String, dynamic> json) => ResultModel(
-        idDiagnosa: json["id_diagnosa"],
-        status: json["status"],
+        // idDiagnosa: json["id_diagnosa"],
+        // status: json["status"],
         penyakit: json['penyakit'],
         saran: json['saran'],
     //        resultModelReturn:
@@ -34,8 +34,8 @@ class ResultModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id_diagnosa": idDiagnosa,
-        "status": status,
+        // "id_diagnosa": idDiagnosa,
+        // "status": status,
         "penyakit": penyakit,
         "saran": saran,
 //        "return": List<dynamic>.from(resultModelReturn.map((x) => x.toJson())),
@@ -80,19 +80,19 @@ class Data {
 //    this.idPenyakit,
 //    this.idUser,
 //    this.judul,
-//    this.keterangan,
+      this.keterangan,
 //    this.createdAt,
       this.penyakit,
       this.saran,
   });
 
-  String idSaran;
-  String idPenyakit;
-  String idUser;
-  String judul;
+  // String idSaran;
+  // String idPenyakit;
+  // String idUser;
+  // String judul;
   String keterangan;
   String saran;
-  DateTime createdAt;
+  // DateTime createdAt;
   String penyakit;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -100,7 +100,7 @@ class Data {
 //        idPenyakit: json["id_penyakit"],
 //        idUser: json["id_user"],
 //        judul: json["judul"],
-//        keterangan: json["keterangan"],
+       keterangan: json["keterangan"],
 //        createdAt: DateTime.parse(json["created_at"]),
         penyakit: json["penyakit"],
         saran: json["saran"],
@@ -113,7 +113,7 @@ class Data {
 //        "id_penyakit": idPenyakit,
 //        "id_user": idUser,
 //        "judul": judul,
-//        "keterangan": keterangan,
+       "keterangan": keterangan,
 //        "created_at": createdAt.toIso8601String(),
       };
 }

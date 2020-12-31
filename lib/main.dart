@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'src/welcomePage.dart';
 
@@ -25,7 +21,64 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home: SplashScreen(),
     );
   }
+}
+
+class SplashScreen extends StatefulWidget{
+
+  _SplashScreen createState() => _SplashScreen();
+
+}
+
+class _SplashScreen extends State<SplashScreen>{
+
+  void initState(){
+    super.initState();
+    splashscreenStart();
+  }
+
+  splashscreenStart() async{
+    var duration = const Duration(seconds: 5);
+    return Timer(duration, (){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomePage()),
+
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context){
+
+    return Scaffold(
+      backgroundColor: Colors.orange,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+
+            Image.network(
+              'https://clinicapardelhas.com/wp-content/uploads/2019/02/logo-medis.png'
+            ),
+
+            SizedBox(height: 24.0,),
+
+            Text("Diagnosa App",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
 }

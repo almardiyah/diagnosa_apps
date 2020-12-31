@@ -6,7 +6,7 @@ import 'package:diagnosa_apps/src/loginPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    fToast = FToast(context);
+    fToast = FToast();
   }
   Widget _backButton() {
     return InkWell(
@@ -243,7 +243,7 @@ class _SignUpPageState extends State<SignUpPage> {
     };
     print(data);
     var jsonResponse = null;
-    var response = await http.post("http://diagnosa-pms.sudamiskin.com/api/daftar", body: data);
+    var response = await http.post("http://eksatamvan.xyz/api/daftar", body: data);
     jsonResponse = json.decode(response.body);
     print(response.body);
     if(jsonResponse['status'] == true){

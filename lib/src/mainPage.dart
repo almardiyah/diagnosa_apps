@@ -1,14 +1,11 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:diagnosa_apps/model/result_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:diagnosa_apps/model/question_model.dart';
 import 'package:diagnosa_apps/model/radio_model.dart';
 import 'package:diagnosa_apps/src/loginPage.dart';
-import 'package:diagnosa_apps/src/submitPage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,18 +142,12 @@ class _MainPageState extends State<MainPage> {
     print(data);
     print(radioModelToJson(listRadio));
     var response = await http.post(
-        "http://diagnosa-pms.sudamiskin.com/api/diagnosa",
+        "http://eksatamvan.xyz/api/diagnosa",
         body: radioModelToJson(listRadio));
     final result = resultModelFromJson(response.body);
     print(result.status);
 //    print(result.resultModelReturn.length);
-    if (result.status) {
-//      if (result.resultModelReturn.length == null ||
-//          result.resultModelReturn.length == 0) {
-//        showSuccess(context, "Saran", "Tetap Jaga Kesehatan", () {
-//          Navigator.pop(context);
-//        });
-//      } else {
+    if (result.status != null) {
       final _random = new Random();
       String data = result.saran;
       String penyakit = result.penyakit;
@@ -198,7 +189,7 @@ class _MainPageState extends State<MainPage> {
           await SharedPreferences.getInstance();
       var jsonResponse = null;
       var response = await http.get(
-        "http://diagnosa-pms.sudamiskin.com/api/gejala",
+        "http://eksatamvan.xyz/api/gejala",
       );
       final quesdata = quenstionModelFromJson(response.body);
       setState(() {
@@ -221,13 +212,6 @@ class _MainPageState extends State<MainPage> {
       });
       print(listRadio.toJson());
       print(quesdata.data.length);
-//      jsonResponse = json.decode(response.body);
-//      print(response.body);
-//      print(jsonResponse['id_gejala']);
-//      print(jsonResponse['kode_gejala']);
-//      print(jsonResponse['nama']);
-//      print(jsonResponse['nilai']);
-//      print(jsonResponse['created_at']);
     }
   }
 
@@ -237,7 +221,7 @@ class _MainPageState extends State<MainPage> {
           await SharedPreferences.getInstance();
       var jsonResponse = null;
       var response = await http.post(
-        "http://diagnosa-pms.sudamiskin.com/api/gejala",
+        "http://eksatamvan.xyz/api/gejala",
       );
     }
   }
@@ -286,16 +270,9 @@ class _MainPageState extends State<MainPage> {
         alignment: Alignment.bottomCenter,
         child: RaisedButton(
           onPressed: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
             submitQuestion(context);
             print(radioModelToJson(listRadio));
             print(_rgProg);
-//          Navigator.of(context).push(
-//          MaterialPageRoute(
-//              builder: (BuildContext context) => SubmitPage()
-//          ));
           },
           elevation: 0.0,
           color: Colors.orange,
@@ -305,44 +282,6 @@ class _MainPageState extends State<MainPage> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         ),
       ),
-//      drawer: Drawer(
-//        // Add a ListView to the drawer. This ensures the user can scroll
-//        // through the options in the drawer if there isn't enough vertical
-//        // space to fit everything.
-//        child: ListView(
-//          // Important: Remove any padding from the ListView.
-//          padding: EdgeInsets.zero,
-//          children: <Widget>[
-//            DrawerHeader(
-//              child: Text('Diagnosa PMS'),
-//              decoration: BoxDecoration(
-//                color: Colors.orange,
-//              ),
-//            ),
-//            ListTile(
-//              title: Text('Hasil Diagnosa'),
-//              onTap: () {
-//                // Update the state of the app
-//                // ...
-//                // Then close the drawer
-//                Navigator.of(context).pushAndRemoveUntil(
-//                    MaterialPageRoute(
-//                        builder: (BuildContext context) => SubmitPage()),
-//                    (Route<dynamic> route) => false);
-//              },
-//            ),
-////            ListTile(
-////              title: Text('Item 2'),
-////              onTap: () {
-////                // Update the state of the app
-////                // ...
-////                // Then close the drawer
-////                Navigator.pop(context);
-////              },
-////            ),
-//          ],
-//        ),
-//      ),
     );
   }
 }
@@ -356,36 +295,7 @@ final List<RadioGroup> _programmingList1 = [
   RadioGroup(index: 0, text: "Tidak"),
 ];
 
-//    @override
-//    Widget build(BuildContext context) {
-//      return Scaffold(
-//        appBar: AppBar(
-//          centerTitle: true,
-//          title: Text("Flutter Radio"),
-//        ),
-//        body: Container(
-//          padding: EdgeInsets.all(18.0),
-//          child: Column(
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: <Widget>[
-//              Text("Apa bahasa pemrograman yang kamu suka ?"),
-//              _buildRadioButton(),
-//              Text("Kamu menyukai pemrograman :"),
-//              SizedBox(height: 8.0,),
-//              Center(
-//                child: Text(
-//                  _selectedValue == null ? "Belum memilih" : _selectedValue,
-//                  style: TextStyle(
-//                      fontSize: 20.0,
-//                      fontWeight: FontWeight.bold
-//                  ),
-//                ),
-//              ),
-//            ],
-//          ),
-//        ),
-//      );
-//    }
+
 
 class RadioGroup {
   final int index;

@@ -77,10 +77,10 @@ class _WelcomePageState extends State<WelcomePage> {
           children: [
             TextSpan(
               text: 'ia',
-              style: TextStyle(color: Colors.black, fontSize: 30),
+              style: TextStyle(color: Colors.white, fontSize: 30),
             ),
             TextSpan(
-              text: 'gnosa PMS',
+              text: 'gnosa Penyakit Gigi & Mulut',
               style: TextStyle(color: Colors.white, fontSize: 30),
             ),
           ]),
