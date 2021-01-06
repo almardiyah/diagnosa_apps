@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:diagnosa_apps/model/question_model.dart';
 import 'package:diagnosa_apps/model/radio_model.dart';
 import 'package:diagnosa_apps/src/loginPage.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,17 +121,13 @@ class _MainPageState extends State<MainPage> {
   void logout() {
     sharedPreferences.clear();
     sharedPreferences.commit();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-        (Route<dynamic> route) => false);
+    Get.off(LoginPage());
   }
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("token") != null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => MainPage()),
-          (Route<dynamic> route) => false);
+      Get.off(MainPage());
     }
   }
 
